@@ -1,0 +1,71 @@
+<style>
+    .wrapperContainer {
+        position: relative;
+    }
+
+    .normalDiv {
+        display: flex;
+        width: 100%;
+        position: relative;
+        z-index: 1;
+    }
+
+    .toggleBtn {
+        font-size: 0.7em;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 0.5em;
+        cursor: pointer;
+        margin-left: 0.5em;
+        padding-left: 0.2em;
+        padding-right: 0.2em;
+    }
+
+    .toggleBtn:hover { background-color: rgba(0, 0, 0, 0.1); }
+
+    .longDiv {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        height: 300px;
+        width: 350px;
+        padding: 0.5rem;
+        border: 1px solid rgb(0, 0, 0, 1);
+        border-radius: 0.5rem;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        background-color: rgb(255, 255, 255);
+        z-index: 2;
+        overflow-y: auto;
+    }
+
+    .longDiv.hidden {
+        display: none;
+    }
+</style>
+<div class="normalDiv">
+    <div>This is a test</div>
+    <div class="toggleBtn">Toggle Div</div>
+</div>
+<div class="longDiv hidden">
+    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+    labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+    et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem
+    ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
+    et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
+    rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
+    dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+    magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+    clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.   
+
+    Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore
+    eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum
+    zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer
+    adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.   
+
+    Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip
+    ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie
+    consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim
+    qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.   
+
+    Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer
+</div>

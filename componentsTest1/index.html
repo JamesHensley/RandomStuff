@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            .divLine {
+                display: flex;
+                width: 100%;
+            }
+
+            .divCol {
+                width: 30%;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            This is a test to see if web-components will distort anything outside the shadow-dom when they are too large
+            <br />
+            <br />
+            <br />
+            <div class="divLine">
+                This is a line with no divs but just a long line of text
+            </div>
+            <div class="divLine">
+                <div class="divCol">
+                    This is a column
+                </div>
+                <div class="divCol">
+                    <div class="myComponent"></div>
+                </div>
+                <div class="divCol">
+                    This is a column
+                </div>
+            </div>
+            <div class="divLine">
+                This is a line with no divs but just a long line of text
+            </div>
+        </div>
+    </body>
+    <script src="./app.js" type="module"></script>
+</html>
