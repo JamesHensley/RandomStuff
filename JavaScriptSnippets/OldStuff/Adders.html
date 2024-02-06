@@ -1,0 +1,864 @@
+<html>
+<head>
+	<style>
+		h3 { margin-top: 0px; margin-bottom: 5px; }
+		.led {
+			height: 16px;
+			width: 16px;
+			border: 1px solid #000000;
+			border-radius: 8px;
+			background-color: rgba(220, 220, 220, 1);
+			text-align: center;
+		}
+		.on {
+			color: #fff;
+			background-color: rgba(200, 0, 0, 1);
+		}
+		table td div { display: inline-block; }
+
+		table.wide td { width: 30px; text-align: center; }
+		table.wide td div { display: inline-block; }
+	</style>
+</head>
+<body>
+	<div>
+	<div class='misc'>
+		<table><tr><td>
+			<h3>Misc</h3>
+			<table><tr>
+				<td>CE: <div class='ce' style="display: flex;"></div></td>
+				<td>CLK: <div class='clk' style="display: flex;"></div></td>
+				<td>CLR: <div class='clr' style="display: flex;"></div></td>
+			</tr></table>
+		</td>
+		<td>
+			<button onclick="cycleOnce()">Cycle Once</button>
+			<button onclick="cycleContinuous()">Cycle Continuous</button>
+		</td></tr></table>
+
+	</div>
+	<hr />
+	<div class='irReg'>
+		<h3>Instruction Register</h3>
+		<table><tr>
+		<td>CE: <div class='enable' style="display: flex;"></div></td>
+		<td>DBus: <div class='dBus' style="display: flex;"></div></td>
+		<td>QBus: <div class='qBus' style="display: flex;"></div></td>
+		</tr></table>
+	</div>
+	<hr />
+	<table><tr>
+	<td>
+	<div class='pcReg'>
+		<h3>Program Control Register</h3>
+		<table><tr>
+		<td>CE: <div class='enable' style="display: flex;"></div></td>
+		<td>DBus: <div class='dBus' style="display: flex;"></div></td>
+		<td>QBus: <div class='qBus' style="display: flex;"></div></td>
+		</tr></table>
+	</div>
+	</td><td>
+	<div class='acReg'>
+		<h3>Accumulator Register</h3>
+		<table><tr>
+		<td>CE: <div class='enable' style="display: flex;"></div></td>
+		<td>DBus: <div class='dBus' style="display: flex;"></div></td>
+		<td>QBus: <div class='qBus' style="display: flex;"></div></td>
+		</tr></table>
+	</td>
+	</tr></table>
+	<hr />
+	<div class='decoder'>
+		<h3>Decoder</h3>
+		<table><tr>
+			<td>Fetch:<div class='sF' style="display: flex;"></div></td>
+			<td>Decode:<div class='sD' style="display: flex;"></div></td>
+			<td>Execute:<div class='sE' style="display: flex;"></div></td>
+			<td>Increment:<div class='sI' style="display: flex;"></div></td>
+			<td>IRBus: <div class='irBus' style="display: flex;"></div></td>
+		</tr></table>
+		<table class='wide idBus'><tr>
+			<td>I: <div class='I'></div></td>
+			<td>O: <div class='O'></div></td>
+			<td>L: <div class='L'></div></td>
+			<td>A: <div class='A'></div></td>
+			<td>S: <div class='S'></div></td>
+			<td>J: <div class='J'></div></td>
+			<td>Ba: <div class='Ba'></div></td>
+			<td>Jz: <div class='Jz'></div></td>
+			<td>Jnz: <div class='Jnz'></div></td>
+			<td>Jc: <div class='Jc'></div></td>
+			<td>Jnc: <div class='Jnc'></div></td>
+			<td>Sig Pins: <div class='sigPins' style='display: flex'></div></td>
+			<td>MUXI: <div class='muxA'></div></td>
+			<td>MUXD: <div class='muxB'></div></td>
+			<td>MUXA: <div class='muxC'></div></td>
+		</tr></table>
+	</div>
+	<hr />
+	<div class='alu'>
+		<h3>ALU</h3>
+		<table><tr>
+			<td>ABus: <div class='aBus' style="display: flex;"></div></td>
+			<td>BBus: <div class='bBus' style="display: flex;"></div></td>
+			<td>ZBus: <div class='zBus' style="display: flex;"></div></td>
+		</tr></table>
+		<table><tr>
+			<td>S0: <div class='s0' style="display: flex;"></div></td>
+			<td>S1: <div class='s1' style="display: flex;"></div></td>
+			<td>S2: <div class='s2' style="display: flex;"></div></td>
+			<td>S3: <div class='s3' style="display: flex;"></div></td>
+			<td>S4: <div class='s4' style="display: flex;"></div></td>
+			<td>Z: <div class='zbit' style="display: flex;"></div></td>
+			<td>C: <div class='carry' style="display: flex;"></div></td>
+		</tr></table>
+
+	</div>
+	<hr />
+	<div class='ram'>
+		<h3>RAM</h3>
+		<table><tr>
+		<td>dIn: <div class='dIn' style="display: flex;"></div></td>
+		<td>dOut:<div class='dOut' style="display: flex;"></div></td>
+		</tr></table>
+		<table><tr>
+		<td>R/W: <div class='rw' style="display: flex;"></div></td>
+		<td>Addr: <div class='addr' style="display: flex;"></div></td>
+		</tr></table>
+	</div>
+	<hr />
+	<div class='muxI'>
+		<h3>MuxI - ALU_A</h3>
+		<table><tr>
+		<td>Sel:<div class='sel' style="display: flex;"></div></td>
+		<td>A-Bus:<div class='aBus' style="display: flex;"></div></td>
+		<td>B-Bus:<div class='bBus' style="display: flex;"></div></td>
+		<td>Z-Bus:<div class='zBus' style="display: flex;"></div></td>
+		</tr></table>
+	</div>
+	<hr />
+	<div class='muxD'>
+		<h3>MuxD - ALU_B</h3>
+		<table><tr>
+		<td>Sel:<div class='sel' style="display: flex;"></div></td>
+		<td>A-Bus:<div class='aBus' style="display: flex;"></div></td>
+		<td>B-Bus:<div class='bBus' style="display: flex;"></div></td>
+		<td>Z-Bus:<div class='zBus' style="display: flex;"></div></td>
+		</tr></table>
+	</div>
+	<hr />
+	<div class='muxA'>
+		<h3>MuxA - RAM Address</h3>
+		<table><tr>
+		<td>Sel:<div class='sel' style="display: flex;"></div></td>
+		<td>A-Bus:<div class='aBus' style="display: flex;"></div></td>
+		<td>B-Bus:<div class='bBus' style="display: flex;"></div></td>
+		<td>Z-Bus:<div class='zBus' style="display: flex;"></div></td>
+		</tr></table>
+	</div>
+	<hr />
+	<div class='s16_1'>
+		<h3>S16_1</h3>
+		<table><tr>
+		<td>All: <div class='all' style="display: flex;"></div></td>
+		<td>High: <div class='high' style="display: flex;"></div></td>
+		<td>Low: <div class='low' style="display: flex;"></div></td>
+		</tr></table>
+	</div>
+	<div class='s16_2'>
+		<h3>S16_2</h3>
+		<table><tr>
+		<td>All: <div class='all' style="display: flex;"></div></td>
+		<td>High: <div class='high' style="display: flex;"></div></td>
+		<td>Low: <div class='low' style="display: flex;"></div></td>
+		</tr></table>
+	</div>
+	<div class='j16_1'>
+		<h3>J16_1</h3>
+		<table><tr>
+		<td>High: <div class='high' style="display: flex;"></div></td>
+		<td>Low: <div class='low' style="display: flex;"></div></td>
+		<td>All: <div class='all' style="display: flex;"></div></td>
+		</tr></table>
+	</div>
+</div>
+	<!--
+		http://simplecpudesign.com/simple_cpu_v1/index.html
+		https://maia-eda.net/hdl-coding/flops/fdce
+
+		0000	Load
+		0001	BitAND
+		0100	Add
+		0110	Sub
+		1000	Jump
+		1001	Jump Condition
+		100100	JumpZ
+		100101	JumpNZ
+		100110	JumpC
+		100111	JumpNC
+		1010	Input
+		1110	Output
+	-->
+<script>
+
+const busWidth = 8;
+const numToBin = (num) => num.toString(2).padStart(busWidth, '0').split('').map(d => parseInt(d,2));
+fillBusBits = (busRef, value) => { busRef.bits.forEach((d, i) => d.value = numToBin(value)[i]); return busRef; }
+
+const And2 = (aBit, bBit) => (aBit & bBit);
+const And3 = (aBit, bBit, cBit) => And2(And2(aBit, bBit), cBit);
+const And4 = (aBit, bBit, cBit, dBit) => And2(And2(aBit, bBit), And2(cBit, dBit));
+const XOr2 = (aBit, bBit) => (aBit ^ bBit);
+const Or2 = (aBit, bBit) => (aBit | bBit);
+const Or3 = (aBit, bBit, cBit) => Or2(Or2(aBit, bBit), cBit);
+const Or4 = (aBit, bBit, cBit, dBit) => Or2(Or2(aBit, bBit), Or2(cBit, dBit));
+const Or5 = (aBit, bBit, cBit, dBit, eBit) => Or2(Or2(Or2(aBit, bBit), Or2(cBit, dBit)), eBit);
+const INV = (bit) => XOr2(bit, 1);
+const NOR = (srcBus) => srcBus.bits.every(d => d == 0) ? 1 : 0;
+const NOR8 = (srcBus) => NOR(srcBus);
+
+const Clock = (clkPin, clkEnable) => {
+	let [clockCount, stopCount] = [0, null];
+
+	const startClock = () => clkEnable.value = 1;
+	const stopClock = () => clkEnable.value = 0;
+	const cycle = () => {
+		switch (clockCount%4) {
+			case (0):
+				clkPin.state = 'clockRising';
+				clkPin.signal.dispatchEvent(clkPin.signalRising);
+				break;
+			case (1):
+				clkPin.value = 1;
+				clkPin.state = 'clockHoldingHigh';
+				clkPin.signal.dispatchEvent(clkPin.signalHigh);
+				break;
+			case (2):
+				clkPin.state = 'clockFalling';
+				clkPin.signal.dispatchEvent(clkPin.signalFalling);
+				break;
+			case (3):
+				clkPin.value = 0;
+				clkPin.state = 'clockHoldingLow';
+				clkPin.signal.dispatchEvent(clkPin.signalLow);
+				break;
+		}
+
+		if (clkEnable.value == 1) { clockCount++; }
+	};
+
+	const cycleOnce = () => cycle();
+	const cycleContinuously = () => {
+		setInterval(cycle, data.clock.appInterval);
+	}
+
+	return { startClock, stopClock, get state() { return clkPin.value; },
+		cycleOnce, cycleContinuously }
+}
+
+const BitBus = (args) => {
+	const bWidth = args && args.width ? args.width : busWidth;
+	const bits = args && args.bits ? args.bits : Array.from(Array(bWidth)).map(d => Bit());
+
+	return {
+		bits,
+		get length() { return bits.length; },
+		get reverseBits() {
+			return Array.from(Array(bits.length).keys()).reverse().map(d => bits[d])
+		},
+		slice(start, end) {
+			return BitBus({ width: end-start, bits: bits.slice(start, end) });
+		},
+		reverse() {
+			return BitBus({ width: bits.length, bits: bits.reverse() });	
+		},
+		get raw() { return bits.map(d => d.value); },
+		setBits(newBits) {
+			bits.forEach((d, i) => d.value = newBits[i]);
+		}
+	}
+}
+
+const Bit = (args) => {
+	let bitVal = args && args.val ? args.val : (args && args.computedVal ? args.computedVal : 0);
+
+	return {
+		value: bitVal,
+	}
+}
+
+const NumRef = (args) => {
+	let numVal = args && args.val ? args.val : 0;
+	return { value: numVal }
+}
+
+const Mux = (aBit, bBit, sel, z) => {
+	const execute = () => {
+		z.value = Or2(And2(aBit.value, INV(sel.value)), And2(bBit.value, sel.value));
+	}
+	setInterval(execute, data.clock.componentInterval/4);
+}
+
+const Mux21 = (aBus, bBus, sel, z) => {
+	Array.from(Array(busWidth)).forEach((d, i) => {
+		Mux(aBus.bits[i], bBus.bits[i], sel, z.bits[i])
+	});
+
+	return { aBus, bBus, zBus: z }
+}
+
+const Mux41 = (aBus, bBus, cBus, dBus, sel0, sel1, z) => {
+	z1 = BitBus();
+	Mux21(aBus, bBus, sel0, z1);
+
+	z2 = BitBus();
+	Mux21(cBus, dBus, sel0, z2);
+
+	Mux21(z1, z2, sel1, z);
+
+	return { aBus, bBus, cBus, dBus, zBus: z }
+}
+
+const ArithmeticLogicUnit = (aBus, bBus, sel0, sel1, sel2, sel3, sel4, zBus, cOut, zeroPin) => {
+	const Inverter = (src, dest) => {
+		const cycle = () => dest.value = INV(src.value);
+		setInterval(cycle, data.clock.componentInterval/4);
+	}
+	const BitwiseAnd = (aBus, bBus, zBus) => {
+		const cycle = () => {
+			zBus.bits.forEach((d, i) => d.value = And2(aBus.bits[i].value, bBus.bits[i].value));
+		}
+		setInterval(cycle, data.clock.componentInterval/4);
+	}
+	const BitwiseInverter = (aBus, en, zBus) => {
+		const cycle = () => {
+			zBus.bits.forEach((d, i) => d.value = XOr2(aBus.bits[i].value, en.value))
+		}
+		setInterval(cycle, data.clock.componentInterval/4);
+	}
+	const Replicator = (a, zBus) => {
+		const cycle = () => {
+			zBus.bits.forEach(d => d.value = a.value);
+		}
+		setInterval(cycle, data.clock.componentInterval/4);
+	}
+
+	const RippleAdder = (aBus, bBus, cIn, cOut, zBus) => {
+		cOut.value = cIn.value;
+		const fullAdder = (aBit, bBit, cOut, sOut) => {
+			const halfAdder = (aBit, bBit, cOut, sOut) => {
+				cOut.value = And2(aBit.value, bBit.value);
+				sOut.value = XOr2(aBit.value, bBit.value);
+			};
+
+			const [co1, so1] = [ Bit(), Bit() ];
+			halfAdder(aBit, bBit, co1, so1);
+
+			const [co2, so2] = [ Bit(), Bit() ];
+			halfAdder(so1, cOut, co2, so2);
+
+			cOut.value = Or2(co1.value, co2.value);
+			sOut.value = so2.value;
+		}
+		// This is where the adding begins and the zBus mutates
+		// We have to work from the end of the array to the beginning
+
+		const cycle = () => {
+			Array.from(Array(zBus.length).keys())
+			.reverse()
+			.forEach(i => fullAdder(aBus.bits[i], bBus.bits[i], cOut, zBus.bits[i]))
+			zeroPin.value = NOR8(zBus);
+		}
+		setInterval(cycle, data.clock.componentInterval/4);
+	}
+
+	const [ b1, z1, z2, z3, z4, z5 ] = [ Bit(), BitBus(), BitBus(), BitBus(), BitBus(), BitBus() ]
+
+	Inverter(sel4, b1)
+	Replicator(b1, z1);
+	BitwiseInverter(bBus, sel3, z2);
+	BitwiseAnd(z1, z2, z3);
+	BitwiseAnd(aBus, bBus, z4);
+	RippleAdder(aBus, z3, sel2, cOut, z5);
+	Mux41(z5, z4, aBus, bBus, sel0, sel1, zBus);
+
+	return { aBus, bBus, zBus, RippleAdder }
+}
+
+const FdpeFlipFlop = (pre, ce, clk, d, q, invert) => {
+	const pState = Bit({ val: pre.value || q.value });
+	const cycle = () => {
+		if (pre.value == 1) { q.value = 1; return; }
+		// q.value = clk.state == 'clockRising' ? (invert ? INV(d.value) : d.value) : q.value;
+		// if (clk.state == 'clockRising') { q.value = invert ? INV(d.value) : d.value; }
+		// if (clk.state == 'clockRising') { pState.value = invert ? INV(d.value) : d.value; }
+		// if (clk.state == 'clockHoldingHigh') { q.value = pState.value; }
+		q.value = invert ? INV(d.value) : d.value;
+	}
+	// setInterval(cycle, data.clock.componentInterval);
+	clk.signal.addEventListener(clk.signalRising.type, cycle);
+}
+
+const FdceFlipFlop = (clr, ce, clk, d, q, invert) => {
+	const pState = Bit();
+	const cycle = () => {
+		if (clr.value == 1) { q.value = 0; return; }
+		// q.value = clk.state == 'clockRising' ? (invert ? INV(d.value) : d.value) : q.value;
+		// if (clk.state == 'clockRising') { q.value = invert ? INV(d.value) : d.value; }
+		// if (clk.state == 'clockRising') { pState.value = invert ? INV(d.value) : d.value; }
+		// if (clk.state == 'clockHoldingHigh') { q.value = pState.value; }
+		q.value = invert ? INV(d.value) : d.value;
+	}
+	// setInterval(cycle, data.clock.componentInterval);
+	clk.signal.addEventListener(clk.signalRising.type, cycle);
+}
+
+const FdcFlipFlop = (clr, clk, d, q, invert) => {
+	const pState = Bit();
+	const cycle = () => {
+		if (clr.value == 1) { q.value = 0; return; }
+		// q.value = clk.state == 'clockRising' ? (invert ? INV(d.value) : d.value) : q.value;
+		// if (clk.state == 'clockRising') { q.value = invert ? INV(d.value) : d.value; }
+		q.value = invert ? INV(d.value) : d.value;
+	}
+
+	//setInterval(cycle, data.clock.componentInterval);
+	clk.signal.addEventListener(clk.signalRising.type, cycle);
+}
+
+const Register = (num) => (dBus, clr, ce, clk, qBus, name) => {
+	const flipFlops = Array.from(Array(num)).map((d, i) => FdceFlipFlop(clr, ce, clk, dBus.bits[i], qBus.bits[i]));
+	if (name == 'pcReg') {
+		if(ce.value == 1) { }
+	}
+	return { dBus, qBus, flipFlops, ce }
+}
+const Register2 = Register(2);
+const Register4 = Register(4)
+const Register8 = Register(8)
+const Register16 = Register(16)
+
+const Split16 = (data) => {
+	return {
+		data,
+		get High() { return data.slice(0, 8); },
+		get Low() { return data.slice(8, 16); }
+	}
+}
+
+const Join16 = (High, Low) => {
+	return {
+		High, Low,
+		get AllBits() { return BitBus({ width: 16, bits: [].concat.apply(High.bits, Low.bits)}); }
+	}
+}
+
+const Decoder = (clk, ce, clr, enIr, enPc, enDa, s0, s1, s2, s3, s4, muxAPin, muxBPin, muxCPin, aluZero, aluCarry, irBus, ramWe, sGenBus) => {
+	// Sequence generator; have to cheat here
+	const SeqGenerator = (clr, ce, clk) => {
+		let seq = 0;
+		const cycle = () => {
+			sGenBus.bits.forEach((d, i) => d.value = i == [seq%4] ? 1 : 0);
+			seq++;
+		}
+		return {
+			get fetch() { return sGenBus.bits[0]; },
+			get decode() { return sGenBus.bits[1]; },
+			get execute() { return sGenBus.bits[2]; },
+			get increment() { return sGenBus.bits[3]; },
+			cycle
+		}
+	}
+	const sGen = SeqGenerator(clr, ce, clk);
+
+	const InstructionDecoder = (sGen, irBus) => {
+		// I dont want to remap or screw with the structure of the instruction, so I just create a new array
+		//  with the references in the correct order (MSB/LSB) where in 100000 '1' is the MSB but in array position 0
+		const iBits = [irBus.bits[7], irBus.bits[6], irBus.bits[5], irBus.bits[4], irBus.bits[3], irBus.bits[2], irBus.bits[1], irBus.bits[0]];
+
+		const ExeOrDeco = (other) => And2(Or2(sGen.decode.value, sGen.execute.value), other)
+		const jumpCondition = () => And4(iBits[7].value, INV(iBits[6].value), INV(iBits[5].value), iBits[4].value);
+		return {
+			get INPUT() { return ExeOrDeco(And4(iBits[7].value, INV(iBits[6].value), iBits[5].value, INV(iBits[4].value))) },
+			get OUTPUT() { return ExeOrDeco(And4(iBits[7].value, iBits[6].value, iBits[5].value, INV(iBits[4].value))) },
+			get LOAD() { return ExeOrDeco(And4(INV(iBits[7].value), INV(iBits[6].value), INV(iBits[5].value), INV(iBits[4].value))) },
+			get ADD() { return ExeOrDeco(And4(INV(iBits[7].value), iBits[6].value, INV(iBits[5].value), INV(iBits[4].value))) },
+			get JUMP() { return ExeOrDeco(And4(iBits[7].value, INV(iBits[6].value), INV(iBits[5].value), INV(iBits[4].value))) },
+			get SUB() { return ExeOrDeco(And4(INV(iBits[7].value), iBits[6].value, iBits[5].value, INV(iBits[4].value))) },
+			get BITAND() { return ExeOrDeco(And4(INV(iBits[7].value), INV(iBits[6].value), INV(iBits[5].value), iBits[4].value)) },
+			get JUMPZ() { return ExeOrDeco(And3(jumpCondition(), INV(iBits[3].value), INV(iBits[2].value))) },
+			get JUMPNZ() { return ExeOrDeco(And3(jumpCondition(), INV(iBits[3].value), iBits[2].value)) },
+			get JUMPC() { return ExeOrDeco(And3(jumpCondition(), iBits[3].value, INV(iBits[2].value))) },
+			get JUMPNC() { return ExeOrDeco(And3(jumpCondition(), iBits[3].value, iBits[2].value)) }
+		}
+	}
+	const id = InstructionDecoder(sGen, irBus);
+
+	// Status register
+	const [carryRegister, zeroRegister] = [ Bit(), Bit() ];
+	srIn = BitBus({ width: 2, bits: [aluCarry, aluZero] });
+	srOut = BitBus({ width: 2, bits: [carryRegister, zeroRegister] });
+	const enST = Bit();
+	const StatusRegister = Register2(srIn, clr, enST, clk, srOut);
+
+	const JUMP_NOT_TAKEN = Bit();
+	const JumpLogic = (zBit) => {
+		const FDC = FdcFlipFlop(clr, clk, zBit, JUMP_NOT_TAKEN, true);
+		const cycle = (e) => {
+			zBit.value = Or5(
+				And2(id.JUMPZ, zeroRegister.value),
+				And2(id.JUMPNZ, INV(zeroRegister.value)),
+				And2(id.JUMPC, carryRegister.value),
+				And2(id.JUMPNC, INV(carryRegister.value)),
+				id.JUMP
+			);
+		}
+		return { cycle }
+	}
+	const jumpLogicBit = Bit();
+	const jumpLogic = JumpLogic(jumpLogicBit);
+
+	const cycle = (e) => {
+		s0.value = Or4(Or5(id.JUMP, id.JUMPZ, id.JUMPNZ, id.JUMPC, id.JUMPNC), id.BITAND, id.INPUT, id.LOAD);
+		s1.value = Or4(Or5(id.JUMP, id.JUMPZ, id.JUMPNZ, id.JUMPC, id.JUMPNC), id.LOAD, id.INPUT, id.OUTPUT);
+		s2.value = Or2(sGen.increment.value, id.SUB);
+		s3.value = id.SUB;
+		s4.value = sGen.increment.value;
+		muxAPin.value = sGen.increment.value;
+		muxBPin.value = Or4(id.LOAD, id.ADD, id.BITAND, id.SUB);
+		muxCPin.value = Or2(id.INPUT, id.OUTPUT);
+		enST.value = Or3(id.ADD, id.SUB, id.BITAND);
+		enIr.value = sGen.fetch.value;
+		enDa.value = And2(sGen.execute.value, Or5(id.LOAD, id.ADD, id.SUB, id.BITAND, id.INPUT));
+		enPc.value = Or2(And2(sGen.increment.value, JUMP_NOT_TAKEN.value), And2(sGen.execute.value, jumpLogicBit.value));
+		ramWe.value = And2(sGen.execute.value, id.OUTPUT);
+	}
+	const process = () => {
+		sGen.cycle();
+		jumpLogic.cycle();
+		cycle();
+	}
+	clk.signal.addEventListener(clk.signalHigh.type, process);
+
+	return { sGen, instructionDecoder: id, irBus, id }
+}
+
+// TODO: Implement flipflops instead of all this jazz
+const Ram = (dIn, dOut, addr, we, clk) => {
+	const memory = Array.from(Array(256))
+		.map(d => BitBus({ width: 16 }));
+
+	const loadWord = (data, offset) => {
+		data.split('')
+		.map(d => parseInt(d, 2))
+		.forEach((d, i) => memory[offset].bits[i].value = d);
+	};
+	const loadData = (data, offset) => data.forEach((d, i) => loadWord(d, i));
+
+	const cycle = (e) => {
+		// if (INV(clk.value) != 1) { return; }
+		// if (clk.state !== 'clockFalling') { return; }
+		const address = parseInt(addr.raw.join(''), 2);
+		Array.from(Array(dOut.bits.length).keys()).reverse()
+		.forEach(i => {
+			dOut.bits[i].value = memory[address].bits[i].value
+			if (we == 1) { memory[address].bits[i].value = dIn.bits[i].value; }
+		});
+	}
+	//setInterval(cycle, data.clock.componentInterval);
+	clk.signal.addEventListener(clk.signalLow.type, cycle);
+
+	return { loadWord, loadData, memory, dOut }
+}
+
+
+const data = {
+	busses: {
+		muxAZBus: BitBus(), muxIZBus: BitBus(), muxDZBus: BitBus(),
+		irDBus: BitBus({ width: 16 }), irQBus: BitBus({ width: 16 }),
+		pcQBus: BitBus(), pcDBus: BitBus(),
+		acQBus: BitBus(),
+		ramBus: BitBus({ width: 16 }),
+		sGenBus: BitBus({ width: 4, bits: [ Bit({val: 1}), Bit({val: 0}), Bit({val: 0}), Bit({val: 0}) ] })
+	},
+	pins: {
+		ce: Bit({ val: 1 }), clr: Bit({ val: 1 }),
+		clk: {
+			signal: new EventTarget(),
+			signalHigh: new CustomEvent('clockHigh'),
+			signalLow: new CustomEvent('clockLow'),
+			signalFalling: new CustomEvent('clockFalling'),
+			signalRising: new CustomEvent('clockRising'),
+			state: '',
+			value: 0,
+			seq: NumRef({ val: 0 })
+		},
+		enIR: Bit(), enPC: Bit(), enDA: Bit(),
+		MUXA: Bit(), MUXB: Bit(), MUXC: Bit(),
+		aluCOut: Bit(), aluZero: Bit(),
+		s0: Bit(), s1: Bit(), s2: Bit(), s3: Bit(), s4: Bit(),
+		ramRW: Bit()
+	},
+	clock: { componentInterval: 50, appInterval: 200, uiInterval: 50 }
+}
+
+// Splitters & joiners
+const s16_1 = Split16(data.busses.irQBus);
+const s16_2 = Split16(data.busses.irDBus);
+const fillBus = BitBus({ width: 8, bits: [Bit({ val: 1 }), Bit(), Bit({ val: 1 }), Bit(), Bit(), Bit(), Bit(), Bit()] })
+const j16_1 = Join16(fillBus, data.busses.acQBus);
+
+// Build RAM - (dIn, dOut, addr, we, clk)
+ram = Ram(j16_1.AllBits, data.busses.irDBus, data.busses.muxAZBus, data.pins.ramRW, data.pins.clk);
+//ram = Ram(j16_1.AllBits, data.busses.ramBus, data.busses.muxAZBus, data.pins.ramRW, data.pins.clk);
+
+// Instruction Register
+irReg = Register16(data.busses.irDBus, data.pins.clr, data.pins.enIR, data.pins.clk, data.busses.irQBus, "irReg")
+
+// Program Control Register
+pcReg = Register8(data.busses.pcDBus, data.pins.clr, data.pins.enPC, data.pins.clk, data.busses.pcQBus, "pcReg");
+
+// Accumulator Register
+acReg = Register8(data.busses.pcDBus, data.pins.clr, data.pins.enDA, data.pins.clk, data.busses.acQBus, "acReg");
+
+// MultiplexorA - Memory Addressing
+const muxA = Mux21(data.busses.pcQBus, s16_1.Low, data.pins.MUXC, data.busses.muxAZBus);
+//const muxA = Mux21(data.busses.pcQBus, s16_1.Low, data.pins.MUXC, data.busses.muxAZBus);
+
+// MultiplexorI - ALU A-Bus
+const muxI = Mux21(s16_1.Low, data.busses.pcQBus, data.pins.MUXA, data.busses.muxIZBus);
+//const muxI = Mux21(data.busses.acQBus, data.busses.pcQBus, data.pins.MUXA, data.busses.muxIZBus);
+
+// MultiplexorD - ALU B-Bus
+const muxD = Mux21(s16_2.Low, data.busses.acQBus, data.pins.MUXB, data.busses.muxDZBus);
+//const muxD = Mux21(s16_2.Low, s16_1.Low, data.pins.MUXB, data.busses.muxDZBus);
+
+// Build the ALU
+const alu = ArithmeticLogicUnit(
+    data.busses.muxIZBus, data.busses.muxDZBus,
+    data.pins.s0, data.pins.s1, data.pins.s2, data.pins.s3, data.pins.s4,
+    data.busses.pcDBus, data.pins.aluCOut, data.pins.aluZero
+);
+
+// Build the Decoder
+const decoder = Decoder(data.pins.clk, data.pins.ce, data.pins.clr,
+    data.pins.enIR, data.pins.enPC, data.pins.enDA,
+    data.pins.s0, data.pins.s1, data.pins.s2, data.pins.s3, data.pins.s4,
+    data.pins.MUXA, data.pins.MUXB, data.pins.MUXC,
+    data.pins.aluZero, data.pins.aluCOut, s16_1.High,
+    data.pins.ramRW, data.busses.sGenBus
+);
+
+ram.loadData([
+	'1010000000000110',
+	'0100000000000101',
+	'1001110000000100',
+	'0000000011111111',
+	'1110000000000111',
+	'1000000000000000',
+	'0000000011111010',
+	'0000000000000000'
+], 0);
+
+const copyBusData = (src, dest) => dest.bits.forEach((d, i) => d.value = src.bits[i].value);
+
+
+const appClock = Clock(data.pins.clk, data.pins.ce);
+data.pins.clr.value = 0;
+// setTimeout(appClock.cycle(), 200);
+
+
+
+
+
+const buildIt = () => {
+	const buildLed = (classNames, parentElem) => {
+		newElem = document.createElement('div');
+		classNames.forEach(d => newElem.classList.add(d))
+		newElem.classList.add('led');
+		document.querySelector(parentElem).append(newElem);
+	}
+	const buildMultiLed = (className, parentElem, srcArray) => {
+		// srcArray.forEach((d, i, e) => buildLed([className, `item${e.length - 1 - (i % e.length)}`], parentElem));
+		srcArray.forEach((d, i, e) => buildLed([className, `item${i}`], parentElem));
+	}
+	buildLed(['led'], '.misc .clk');
+	buildLed(['led'], '.misc .clr');
+	buildLed(['led'], '.misc .ce');
+
+	buildLed(['led'], '.decoder .sF');
+	buildLed(['led'], '.decoder .sD');
+	buildLed(['led'], '.decoder .sE');
+	buildLed(['led'], '.decoder .sI');
+	const iClasses = ['.I', '.O', '.L', '.A', '.S', '.J', '.Ba', '.Jz', '.Jnz', '.Jc', '.Jnc'];
+	iClasses.forEach(d => buildLed(['led'], `.decoder .idBus ${d}`));
+
+	buildMultiLed('sigPins', '.decoder .sigPins', [data.pins.s0, data.pins.s1, data.pins.s2, data.pins.s3, data.pins.s4]);
+	buildLed(['led'], '.decoder .muxA');
+	buildLed(['led'], '.decoder .muxB');
+	buildLed(['led'], '.decoder .muxC');
+	buildMultiLed('busLed', '.decoder .irBus', decoder.irBus.raw);
+
+	buildLed(['led'], '.irReg .enable');
+	buildMultiLed('irRegD', '.irReg .dBus', irReg.dBus.raw);
+	buildMultiLed('irRegQ', '.irReg .qBus', irReg.qBus.raw);
+
+	buildLed(['led'], '.pcReg .enable');
+	buildMultiLed('pcRegD', '.pcReg .dBus', pcReg.dBus.raw);
+	buildMultiLed('pcRegQ', '.pcReg .qBus', pcReg.qBus.raw);
+
+	buildLed(['led'], '.acReg .enable');
+	buildMultiLed('acRegD', '.acReg .dBus', acReg.dBus.raw);
+	buildMultiLed('acRegQ', '.acReg .qBus', acReg.qBus.raw);
+
+	buildMultiLed('aluA', '.alu .aBus', data.busses.muxIZBus.raw);
+	buildMultiLed('aluB', '.alu .bBus', data.busses.muxDZBus.raw);
+	buildMultiLed('aluZ', '.alu .zBus', data.busses.pcDBus.raw);
+	buildLed(['led'], '.alu .s0');
+	buildLed(['led'], '.alu .s1');
+	buildLed(['led'], '.alu .s2');
+	buildLed(['led'], '.alu .s3');
+	buildLed(['led'], '.alu .s4');
+	buildLed(['led'], '.alu .zbit');
+	buildLed(['led'], '.alu .carry');
+
+	buildMultiLed('dIn', '.ram .dIn', j16_1.AllBits.raw);
+	buildMultiLed('addr', '.ram .addr', data.busses.muxAZBus.raw);
+	buildMultiLed('dOut', '.ram .dOut', data.busses.irDBus.raw);
+	buildLed(['ramRW'], '.ram .rw');
+
+	buildLed(['led'], '.muxA .sel');
+	buildMultiLed('muxA', '.muxA .aBus', muxA.aBus.raw);
+	buildMultiLed('muxA', '.muxA .bBus', muxA.bBus.raw);
+	buildMultiLed('muxA', '.muxA .zBus', muxA.zBus.raw);
+
+	buildLed(['led'], '.muxI .sel');
+	buildMultiLed('muxI', '.muxI .aBus', muxI.aBus.raw);
+	buildMultiLed('muxI', '.muxI .bBus', muxI.aBus.raw);
+	buildMultiLed('muxI', '.muxI .zBus', muxI.zBus.raw);
+
+	buildLed(['led'], '.muxD .sel');
+	buildMultiLed('muxD', '.muxD .aBus', muxD.aBus.raw);
+	buildMultiLed('muxD', '.muxD .bBus', muxD.bBus.raw);
+	buildMultiLed('muxD', '.muxD .zBus', muxD.zBus.raw);
+
+	buildMultiLed('led', '.s16_1 .all', s16_1.data.raw);
+	buildMultiLed('led', '.s16_1 .high', s16_1.High.raw);
+	buildMultiLed('led', '.s16_1 .low', s16_1.Low.raw);
+
+	buildMultiLed('led', '.s16_2 .all', s16_2.data.raw);
+	buildMultiLed('led', '.s16_2 .high', s16_2.High.raw);
+	buildMultiLed('led', '.s16_2 .low', s16_2.Low.raw);
+
+	buildMultiLed('led', '.j16_1 .high', j16_1.High.raw);
+	buildMultiLed('led', '.j16_1 .low', j16_1.Low.raw);
+	buildMultiLed('led', '.j16_1 .all', j16_1.AllBits.raw);
+}
+
+const report = () => {
+	const setOn = (elem) => { elem.classList.add('on'); }
+	const setOff = (elem) => { elem.classList.remove('on'); }
+	const update = () => {
+		(data.pins.clk.value == 0 ? setOff : setOn)(document.querySelector('.misc .clk .led'));
+		document.querySelector('.misc .clk .led').innerHTML = data.pins.clk.state == 'clockRising' ? 'R' : (data.pins.clk.state == 'clockFalling' ? 'F' : '');
+
+		(data.pins.clr.value == 0 ? setOff : setOn)(document.querySelector('.misc .clr .led'));
+		(data.pins.ce.value == 0 ? setOff : setOn)(document.querySelector('.misc .ce .led'));
+
+		//Mux A
+		(data.pins.MUXC.value == 0 ? setOff : setOn)(document.querySelector('.muxA .sel .led'));
+		muxA.aBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.muxA .aBus .item${i}`)));
+		muxA.bBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.muxA .bBus .item${i}`)));
+		muxA.zBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.muxA .zBus .item${i}`)));
+
+		// Mux I
+		(data.pins.MUXA.value == 0 ? setOff : setOn)(document.querySelector('.muxI .sel .led'));
+		muxI.aBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.muxI .aBus .item${i}`)));
+		muxI.bBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.muxI .bBus .item${i}`)));
+		muxI.zBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.muxI .zBus .item${i}`)));
+
+		// Mux D
+		(data.pins.MUXB.value == 0 ? setOff : setOn)(document.querySelector('.muxD .sel .led'));
+		muxD.aBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.muxD .aBus .item${i}`)));
+		muxD.bBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.muxD .bBus .item${i}`)));
+		muxD.zBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.muxD .zBus .item${i}`)));
+
+		//Instruction Register
+		(data.pins.enIR.value == 0 ? setOff : setOn)(document.querySelector('.irReg .enable .led'));
+		irReg.dBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.irReg .dBus .item${i}`)));
+		irReg.qBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.irReg .qBus .item${i}`)));
+
+		//PC Register
+		(data.pins.enPC.value == 0 ? setOff : setOn)(document.querySelector('.pcReg .enable .led'));
+		pcReg.dBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.pcReg .dBus .item${i}`)));
+		pcReg.qBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.pcReg .qBus .item${i}`)));
+
+		// Accumulator Register
+		(data.pins.enDA.value == 0 ? setOff : setOn)(document.querySelector('.acReg .enable .led'));
+		acReg.dBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.acReg .dBus .item${i}`)));
+		acReg.qBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.acReg .qBus .item${i}`)));
+
+		//Decoder
+		(decoder.sGen.fetch.value == 0 ? setOff : setOn)(document.querySelector('.decoder .sF .led'));
+		(decoder.sGen.decode.value == 0 ? setOff : setOn)(document.querySelector('.decoder .sD .led'));
+		(decoder.sGen.execute.value == 0 ? setOff : setOn)(document.querySelector('.decoder .sE .led'));
+		(decoder.sGen.increment.value == 0 ? setOff : setOn)(document.querySelector('.decoder .sI .led'));
+		[data.pins.s0, data.pins.s1, data.pins.s2, data.pins.s3, data.pins.s4].map(d => d.value)
+			.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.sigPins.item${i}`)));
+		(decoder.id.INPUT == 0 ? setOff : setOn)(document.querySelector('.decoder .idBus .I .led'));
+		(decoder.id.OUTPUT == 0 ? setOff : setOn)(document.querySelector('.decoder .idBus .O .led'));
+		(decoder.id.LOAD == 0 ? setOff : setOn)(document.querySelector('.decoder .idBus .L .led'));
+		(decoder.id.ADD == 0 ? setOff : setOn)(document.querySelector('.decoder .idBus .A .led'));
+		(decoder.id.JUMP == 0 ? setOff : setOn)(document.querySelector('.decoder .idBus .J .led'));
+		(decoder.id.SUB == 0 ? setOff : setOn)(document.querySelector('.decoder .idBus .S .led'));
+		(decoder.id.BITAND == 0 ? setOff : setOn)(document.querySelector('.decoder .idBus .Ba .led'));
+		(decoder.id.JUMPZ == 0 ? setOff : setOn)(document.querySelector('.decoder .idBus .Jz .led'));
+		(decoder.id.JUMPNZ == 0 ? setOff : setOn)(document.querySelector('.decoder .idBus .Jnz .led'));
+		(decoder.id.JUMPC == 0 ? setOff : setOn)(document.querySelector('.decoder .idBus .Jc .led'));
+		(decoder.id.JUMPNC == 0 ? setOff : setOn)(document.querySelector('.decoder .idBus .Jnc .led'));
+		(data.pins.MUXA.value == 0 ? setOff : setOn)(document.querySelector('.decoder .muxA .led'));
+		(data.pins.MUXB.value == 0 ? setOff : setOn)(document.querySelector('.decoder .muxB .led'));
+		(data.pins.MUXC.value == 0 ? setOff : setOn)(document.querySelector('.decoder .muxC .led'));
+		decoder.irBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.decoder .irBus .item${i}`)));
+
+		//Alu
+		alu.aBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.aluA.item${i}`)));
+		alu.bBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.aluB.item${i}`)));
+		alu.zBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.aluZ.item${i}`)));
+		(data.pins.s0.value == 0 ? setOff : setOn)(document.querySelector('.alu .s0 .led'));
+		(data.pins.s1.value == 0 ? setOff : setOn)(document.querySelector('.alu .s1 .led'));
+		(data.pins.s2.value == 0 ? setOff : setOn)(document.querySelector('.alu .s2 .led'));
+		(data.pins.s3.value == 0 ? setOff : setOn)(document.querySelector('.alu .s3 .led'));
+		(data.pins.s4.value == 0 ? setOff : setOn)(document.querySelector('.alu .s4 .led'));
+		(data.pins.aluZero.value == 0 ? setOff : setOn)(document.querySelector('.alu .zbit .led'));
+		(data.pins.aluCOut.value == 0 ? setOff : setOn)(document.querySelector('.alu .carry .led'));
+
+		//Ram
+		j16_1.AllBits.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.ram .dIn .item${i}`)));
+		data.busses.muxAZBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.ram .addr .item${i}`)));
+		data.busses.irDBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.ram .dOut .item${i}`)));
+		(data.pins.ramRW.value == 0 ? setOff : setOn)(document.querySelector('.ram .rw .ramRW'));
+
+		s16_1.data.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.s16_1 .all .item${i}`)));
+		s16_1.High.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.s16_1 .high .item${i}`)));
+		s16_1.Low.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.s16_1 .low .item${i}`)));
+
+		s16_2.data.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.s16_2 .all .item${i}`)));
+		s16_2.High.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.s16_2 .high .item${i}`)));
+		s16_2.Low.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.s16_2 .low .item${i}`)));
+
+		j16_1.AllBits.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.j16_1 .all .item${i}`)));
+		j16_1.High.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.j16_1 .high .item${i}`)));
+		j16_1.Low.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.j16_1 .low .item${i}`)));
+	}
+	setInterval(update, data.clock.uiInterval);
+}
+
+const cycleOnce = () => appClock.cycleOnce();
+const cycleContinuous = () => appClock.cycleContinuously();
+
+buildIt();
+report();
+</script>
+</body>
+</html>

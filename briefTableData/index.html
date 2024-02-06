@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en-US" >
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script src="./app/app.module.js" type="module"></script>
+
+        <script src="./components/testDirective.js" type="module"></script>
+        <style>
+            table { border: 1px solid; font-family: monospace; border-collapse: collapse; };
+            tr { border: 1px solid; }
+            td { border: 1px solid; padding-left: 10px; padding-right: 10px; }
+        </style>
+    </head>
+
+    <body ng-app="briefTableData" ng-controller="appController">
+        <test-directive ng-if="appReady == true"></test-directive>
+    </body>
+</html>

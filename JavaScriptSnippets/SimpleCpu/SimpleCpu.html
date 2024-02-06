@@ -1,0 +1,1332 @@
+<html>
+
+<head>
+	<style>
+		h3 {
+			margin-top: 0px;
+			margin-bottom: 5px;
+		}
+
+		.led {
+			height: 16px;
+			width: 16px;
+			border: 1px solid #000000;
+			border-radius: 8px;
+			background-color: rgba(220, 220, 220, 1);
+			text-align: center;
+		}
+
+		.led.wide {
+			width: 32px;
+		}
+
+		.on {
+			color: #fff;
+			background-color: rgba(200, 0, 0, 1);
+		}
+
+		table td div {
+			display: inline-block;
+		}
+
+		table.wide td,
+		td.wide {
+			width: 30px;
+			text-align: center;
+		}
+
+		table.wide td div {
+			display: inline-block;
+		}
+
+		.aVal,
+		.bVal,
+		.zVal,
+		.dVal,
+		.qVal,
+		.rawVal,
+		.dIn1,
+		.dIn2,
+		.dOut1,
+		.dOut2 {
+			font-weight: bold;
+		}
+
+		td {
+			padding-right: 5px;
+		}
+
+		.block {
+			display: block;
+		}
+
+		.flex {
+			display: flex;
+		}
+
+		.center {
+			text-align: center
+		}
+	</style>
+</head>
+
+<body>
+	<div>
+		<div class='misc'>
+			<h3>Misc</h3>
+			<table>
+				<tr>
+					<td>CE: <div class='ce flex'></div></td>
+					<td>CLK: <div class='clk flex'></div></td>
+					<td>CLR: <div class='clr flex'></div></td>
+					<td>
+						<button onclick="stepClock()">Step Clock</button>
+						<button onclick="stepCycle()">Step Cycle</button>
+						<button onclick="fullCycle()">Run One Full Cycle</button>
+						<button onclick="cycleContinuous()">Cycle Continuous</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<hr />
+		<div class='irReg'>
+			<h3>Instruction Register</h3>
+			<table>
+				<tr>
+					<td>CE: <div class='enable flex'></div>
+					</td>
+					<td>DBus: [<span class='dIn1'></span>, <span class='dIn2'></span>]<div class='dBus flex'></div>
+					</td>
+					<td>QBus: [<span class='dOut1'></span>, <span class='dOut2'></span>]<div class='qBus flex'></div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<hr />
+		<div class='pcReg'>
+			<h3>Program Counter</h3>
+			<table>
+				<tr>
+					<td>CE: <div class='ceenable flex'></div>
+					</td>
+					<td>LD: <div class='ldenable flex'></div>
+					</td>
+					<td>DBus: <span class='dVal'></span>
+						<div class='dBus flex'></div>
+					</td>
+					<td>QBus: <span class='qVal'></span>
+						<div class='qBus flex'></div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<hr />
+		<div class='acReg'>
+			<h3>Accumulator Register</h3>
+			<table>
+				<tr>
+					<td>CE: <div class='enable flex'></div>
+					</td>
+					<td>DBus: <span class='dVal'></span>
+						<div class='dBus flex'></div>
+					</td>
+					<td>QBus: <span class='qVal'></span>
+						<div class='qBus flex'></div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<hr />
+		<div class='decoder'>
+			<h3>Decoder</h3>
+			<table>
+				<tr>
+					<td>Fetch:<div class='sF flex'></div>
+					</td>
+					<td>Decode:<div class='sD flex'></div>
+					</td>
+					<td>Execute:<div class='sE flex'></div>
+					</td>
+					<td>IRBus: <div class='irBus flex'></div>
+					</td>
+					<td>ALU Z: <div class='srZIn block center'></div>
+					</td>
+					<td class='wide'>RamEn: <div class='ramEn'></div>
+					</td>
+					<td class='wide'>RomEn: <div class='romEn'></div>
+					</td>
+					<td class='wide'>RamRW: <div class='ramWr'></div>
+					</td>
+					<td class='wide'>Addr: <div class='addrSel'></div>
+					</td>
+					<td class='wide'>Data: <div class='dataSel'></div>
+					</td>
+				</tr>
+			</table>
+			<table class='wide idBus'>
+				<tr>
+					<td>M: <div class='M'></div>
+					</td>
+					<td>A: <div class='A'></div>
+					</td>
+					<td>S: <div class='S'></div>
+					</td>
+					<td>Ba: <div class='Ba'></div>
+					</td>
+					<td>L: <div class='L'></div>
+					</td>
+					<td>St: <div class='St'></div>
+					</td>
+					<td>Am: <div class='Am'></div>
+					</td>
+					<td>Ju: <div class='Ju'></div>
+					</td>
+					<td>Jz: <div class='Jz'></div>
+					</td>
+					<td>Jnz: <div class='Jnz'></div>
+					</td>
+
+				</tr>
+			</table>
+		</div>
+		<hr />
+		<div class='alu'>
+			<h3>ALU</h3>
+			<table>
+				<tr>
+					<td>ABus: <span class='aVal'></span>
+						<div class='aBus flex'></div>
+					</td>
+					<td>BBus: <span class='bVal'></span>
+						<div class='bBus flex'></div>
+					</td>
+					<td>ZBus: <span class='zVal'></span>
+						<div class='zBus flex'></div>
+					</td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<td>S0: <div class='s0 flex'></div>
+					</td>
+					<td>S1: <div class='s1 flex'></div>
+					</td>
+					<td>S2: <div class='s2 flex'></div>
+					</td>
+					<td>S3: <div class='s3 flex'></div>
+					</td>
+					<td>S4: <div class='s4 flex'></div>
+					</td>
+					<td>Zero Out: <div class='zbit flex'></div>
+					</td>
+					<td>Carry Out: <div class='carry flex'></div>
+					</td>
+				</tr>
+			</table>
+
+		</div>
+		<hr />
+		<div class='ram'>
+			<h3>RAM</h3>
+			<table>
+				<tr>
+					<td>dIn: [<span class='dIn1'></span>, <span class='dIn2'></span>]<div class='dIn flex'></div>
+					</td>
+					<td>dOut: [<span class='dOut1'></span>, <span class='dOut2'></span>]<div class='dOut flex'></div>
+					</td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<td>R/W: <div class='rw flex'></div>
+					</td>
+					<td>Addr: <span class='rawVal'></span>
+						<div class='addr flex'></div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<hr />
+		<div class='muxD'>
+			<h3>MuxD - ALU_B</h3>
+			<table>
+				<tr>
+					<td>Sel:<div class='sel flex'></div>
+					</td>
+					<td>A-Bus: <span class='aVal'></span>
+						<div class='aBus flex'></div>
+					</td>
+					<td>B-Bus: <span class='bVal'></span>
+						<div class='bBus flex'></div>
+					</td>
+					<td>Z-Bus: <span class='zVal'></span>
+						<div class='zBus flex'></div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<hr />
+		<div class='muxA'>
+			<h3>MuxA - RAM Address</h3>
+			<table>
+				<tr>
+					<td>Sel:<div class='sel flex'></div>
+					</td>
+					<td>A-Bus: <span class='aVal'></span>
+						<div class='aBus flex'></div>
+					</td>
+					<td>B-Bus: <span class='bVal'></span>
+						<div class='bBus flex'></div>
+					</td>
+					<td>Z-Bus: <span class='zVal'></span>
+						<div class='zBus flex'></div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<hr />
+		<div class='s16_1'>
+			<h3>S16_1</h3>
+			<table>
+				<tr>
+					<td>All: <div class='all flex'></div>
+					</td>
+					<td>High: <div class='high flex'></div>
+					</td>
+					<td>Low: <div class='low flex'></div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class='s16_2'>
+			<h3>S16_2</h3>
+			<table>
+				<tr>
+					<td>All: <div class='all flex'></div>
+					</td>
+					<td>High: <div class='high flex'></div>
+					</td>
+					<td>Low: <div class='low flex'></div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class='j16_1'>
+			<h3>J16_1</h3>
+			<table>
+				<tr>
+					<td>High: <div class='high flex'></div>
+					</td>
+					<td>Low: <div class='low flex'></div>
+					</td>
+					<td>All: <div class='all flex'></div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<!--
+		http://simplecpudesign.com/simple_cpu_v1/index.html
+		https://maia-eda.net/hdl-coding/flops/fdce
+
+		0000 - Move ACC kk : ACC <- KK
+		0001 - Add ACC kk : ACC <- ACC + KK
+		0010 - Sub ACC kk : ACC <- ACC - KK
+		0011 - And ACC kk : ACC <- ACC & KK
+		0100 - Load ACC aa : ACC <- M[AA]
+		0101 - Store ACC aa : M[AA] <- ACC
+		0110 - AddM ACC aa : ACC <- ACC + M[AA]
+		1000 - Jump U aa : PC <- AA
+		1001 - Jump Z aa : IF Z=1 PC <- AA ELSE PC <- PC + 1
+		1010 - Jump NZ aa : IF Z=0 PC <- AA ELSE PC <- PC + 1
+	-->
+	<script>
+		const busWidth = 8;
+		const numToBin = (num) => num.toString(2).padStart(busWidth, '0').split('').map(d => parseInt(d, 2));
+		const fillBusBits = (busRef, value) => {
+			busRef.bits.forEach((d, i) => d.value = numToBin(value)[i]);
+			return busRef;
+		}
+
+		const andOp = (...bits) => {
+			const bitCnt = bits.length - 1;
+			setInterval((bits) => bits[bitCnt].value = bits.slice(0, bitCnt)
+				.reduce((t, n) => t & n.value, 1), data.clock.componentInterval, bits);
+		}
+		const And2 = (aBit, bBit, out) => andOp(aBit, bBit, out);
+		const And3 = (aBit, bBit, cBit, out) => andOp(aBit, bBit, cBit, out);
+		const And4 = (aBit, bBit, cBit, dBit, out) => andOp(aBit, bBit, cBit, dBit, out);
+		const XOr2 = (aBit, bBit, out) => {
+			setInterval((aBit, bBit, out) => out.value = aBit.value ^ bBit.value, data.clock.componentInterval, aBit,
+				bBit, out);
+		}
+		const orOp = (...bits) => {
+			const bitCnt = bits.length - 1;
+			setInterval((bits) => bits[bitCnt].value = bits.slice(0, bitCnt)
+				.reduce((t, n) => t | n.value, 0), data.clock.componentInterval, bits);
+		}
+		const Or2 = (aBit, bBit, out) => orOp(aBit, bBit, out);
+		const Or3 = (aBit, bBit, cBit, out) => orOp(aBit, bBit, cBit, out);
+		const Or4 = (aBit, bBit, cBit, dBit, out) => orOp(aBit, bBit, cBit, dBit, out);
+		const Or5 = (aBit, bBit, cBit, dBit, eBit, out) => orOp(aBit, bBit, cBit, dBit, eBit, out);
+		const Or6 = (aBit, bBit, cBit, dBit, eBit, fBit, out) => orOp(aBit, bBit, cBit, dBit, eBit, fBit, out);
+
+		const INV = (bit, out) => {
+			setInterval((bit, out) => out.value = bit.value ^ 1, data.clock.componentInterval, bit, out);
+		}
+		const NOR8 = (srcBus, out) => {
+			setInterval((srcBus, out) => out.value = parseInt(srcBus.raw.join(''), 2) == 0 ? 1 : 0,
+				data.clock.componentInterval, srcBus, out);
+		}
+
+		//Replicate - Copy value of aBit to out
+		const REP = (aBit, out) => {
+			setInterval((bit, out) => out.value = aBit.value, data.clock.componentInterval, aBit, out);
+		}
+
+		const Clock = (clk, ce, clr) => {
+			let [clockCount, clockStep] = [null, 0];
+
+			clr.value = 1;
+			ce.value = 1;
+			clk.value = 0;
+			clk.state = 'clockHoldingLow';
+			clockCount = 0;
+
+			const powerOn = () => {
+				setTimeout((clk, ce, clr) => {
+					clr.value = 0;
+					clk.state = 'clockHoldingLow';
+				}, data.clock.componentInterval * 5, clk, ce, clr);
+			}
+
+			const cycle = () => {
+				switch (clockCount % 4) {
+					case (0):
+						clk.value = 1;
+						clk.state = 'clockRising';
+						break;
+					case (1):
+						clk.value = 1;
+						clk.state = 'clockHoldingHigh';
+						break;
+					case (2):
+						clk.value = 0;
+						clk.state = 'clockFalling';
+						break;
+					case (3):
+						clk.value = 0;
+						clk.state = 'clockHoldingLow';
+						clockStep++;
+						break;
+				}
+				if (ce.value == 1) {
+					clockCount++;
+				}
+			};
+			const stepClock = () => cycle();
+			const stepCycle = () => {
+				Array.from(Array(4).keys()).forEach((d, i) => {
+					setTimeout(cycle, i * data.clock.appInterval);
+				})
+			};
+			const fullCycle = () => {
+				Array.from(Array(12).keys()).forEach((d, i) => {
+					setTimeout(cycle, i * data.clock.appInterval);
+				})
+			};
+			const cycleContinuously = () => {
+				setInterval(cycle, data.clock.appInterval);
+			}
+
+			return {
+				powerOn,
+				get state() { return clk.value; },
+				stepClock,
+				stepCycle,
+				fullCycle,
+				cycleContinuously,
+				get step() { return clockStep; }
+			}
+		}
+
+		const BitBus = (args) => {
+			const bWidth = args && args.width ? args.width : busWidth;
+			const bits = args && args.bits ? args.bits : Array.from(Array(bWidth)).map(d => Bit());
+
+			return {
+				bits,
+				get length() {
+					return bits.length;
+				},
+				get reverseBits() {
+					return Array.from(Array(bits.length).keys()).reverse().map(d => bits[d])
+				},
+				slice(start, end) {
+					return BitBus({
+						width: end - start,
+						bits: bits.slice(start, end)
+					});
+				},
+				reverse() {
+					const newBus = BitBus({
+						width: bits.length
+					});
+					Array.from(Array(bits.length).keys()).reverse()
+						.forEach((d, i) => newBus.bits[d].value = bits[i].value);
+					return newBus;
+				},
+				get raw() {
+					return bits.map(d => d.value);
+				},
+				setBits(newBits) {
+					bits.forEach((d, i) => d.value = parseInt(newBits[i], 2));
+				}
+			}
+		}
+
+		const Bit = (args) => {
+			let subscriptionTargets = [];
+			let bitVal = args && args.val ? args.val : (args && args.computedVal ? args.computedVal : 0);
+
+			if (args && args.subscriptionTarget) {
+				subscriptionTargets.push(args.subscriptionTarget);
+			}
+
+			return {
+				get value() {
+					return bitVal;
+				},
+				set value(val) {
+					if (val != bitVal) {
+						bitVal = val;
+					}
+				}
+			}
+		}
+
+		const Mux = (aBit, bBit, sel, zBit) => {
+			const [z1, z2, z3] = [Bit(), Bit(), Bit()]
+			INV(sel, z1);
+			And2(aBit, z1, z2);
+			And2(bBit, sel, z3)
+			Or2(z2, z3, zBit);
+
+			return {
+				aBit,
+				bBit,
+				sel,
+				zBit
+			};
+		}
+
+		const Mux21 = (aBus, bBus, sel, zBus) => {
+			const muxes = Array.from(Array(busWidth)).map((d, i) => {
+				return Mux(aBus.bits[i], bBus.bits[i], sel, zBus.bits[i]);
+			});
+
+			return {
+				aBus,
+				bBus,
+				zBus,
+				sel,
+				muxes
+			}
+		}
+
+		const Mux31 = (aBus, bBus, cBus, s0, s1, zBus) => {
+			z1 = BitBus();
+			const mux1 = Mux21(aBus, bBus, s0, z1);
+			const mux2 = Mux21(z1, cBus, s1, zBus);
+
+			return {
+				aBus,
+				bBus,
+				cBus,
+				zBus,
+				s0,
+				s1,
+				muxes: [mux1, mux2]
+			}
+		}
+
+		const Mux41 = (aBus, bBus, cBus, dBus, sel0, sel1, zBus) => {
+			z1 = BitBus();
+			const mux1 = Mux21(aBus, bBus, sel0, z1);
+
+			z2 = BitBus();
+			const mux2 = Mux21(cBus, dBus, sel0, z2);
+
+			const mux3 = Mux21(z1, z2, sel1, zBus);
+
+			return {
+				aBus,
+				bBus,
+				cBus,
+				dBus,
+				zBus,
+				s0: sel0,
+				s1: sel1,
+				muxes: [mux1, mux2, mux3]
+			}
+		}
+
+		const halfAdder = (aBit, bBit, cBit, sBit) => {
+			And2(aBit, bBit, cBit);
+			XOr2(aBit, bBit, sBit);
+		};
+
+		const fullAdder = (aBit, bBit, sBitOut, cBitIn, cBitOut) => {
+			const [co1, so1] = [Bit(), Bit()];
+			const ha1 = halfAdder(aBit, bBit, co1, so1);
+
+			const [co2, so2] = [Bit(), Bit()];
+			const ha2 = halfAdder(so1, cBitIn, co2, sBitOut);
+
+			Or2(co1, co2, cBitOut);
+			return {
+				cBitIn,
+				cBitOut,
+				sBitOut,
+				ha1,
+				ha2,
+				co1,
+				so1,
+				co2,
+				so2
+			}
+		};
+
+		const RippleAdder = (aBus, bBus, cIn, cOut, zBus) => {
+			const cBits = [cIn, Bit(), Bit(), Bit(), Bit(), Bit(), Bit(), Bit(), cOut];
+
+			const adders = Array.from(Array(zBus.length).keys()).reverse()
+				.map((d, i) => fullAdder(aBus.bits[d], bBus.bits[d], zBus.bits[d], cBits[i], cBits[i + 1]));
+
+			return { aBus, bBus, cIn, cOut, zBus }
+		};
+
+		const ProgramCounter = (dBus, ld, clk, ce, clr, qBus) => {
+			[aBus, bBus, raZBus, zBus, c1, c2] = [BitBus(), BitBus(), BitBus(), BitBus(), Bit(), Bit()];
+			bBus.bits[7].value = 1;
+			const ra = RippleAdder(qBus, bBus, c1, c2, raZBus);
+			const mx = Mux21(raZBus, dBus, ld, zBus);
+			const r8 = Register8(zBus, clr, ce, clk, qBus, true);
+
+			return { ra, mx, r8, dBus, qBus, raZBus };
+		}
+
+		const ArithmeticLogicUnit = (aBus, bBus, ctl0, ctl1, ctl2, zBus, cOut) => {
+			const [bInv, z1, z2] = [BitBus(), BitBus(), BitBus()]
+
+			const ra = RippleAdder(aBus, bBus, ctl0, cOut, z1);
+			bInv.bits.forEach((d, i) => XOr2(bBus.bits[i], ctl0, d))
+
+			z2.bits.forEach((d, i) => And2(aBus.bits[i], bBus.bits[i], d));
+			const mx = Mux31(z1, z2, bBus, ctl1, ctl2, zBus);
+
+			return { aBus, bBus, zBus, cOut, zBus, ra, mx }
+		}
+
+		const FdpeFlipFlop = (pre, ce, clk, d, q, invert, useState) => {
+			const pState = Bit({ val: pre.value });
+			const cycle = () => {
+				pState.value = pre.value == 1 ? 1 :((clk.state == 'clockHoldingLow' || (useState && clk.State == 'clockRising')) ? (invert ? d.value ^ 1 : d.value) : pState.value);
+				q.value = pre.value == 1 ? 1 : (ce.value == 0 ? q.value : (clk.State == 'clockRising' ? pState.value : q.value));
+				1;
+/*
+				if (useState) {
+					q.value = clk.state == 'clockRising' ? pState.value : q.value;
+				} else {
+					q.value = clk.state == 'clockRising' ? (invert ? d.value ^ 1 : d.value) : q.value;
+				}
+*/
+			}
+			setInterval(cycle, data.clock.componentInterval);
+		}
+
+		getP = (clr, defVal, d) => clr.value == 1 ? : ce.value == 0
+		const flipP = (pre, ce, useState) => (d, q) => {
+
+		}
+		const flip = (clr, ce, useState) => (d, q) => {
+
+		}
+
+		const FdceFlipFlop = (clr, ce, clk, d, q, invert, useState) => {
+			const pState = Bit();
+			const cycle = () => {
+				pState.value = clr.value == 1 ? 0 : ((clk.state == 'clockHoldingLow' || (useState && clk.State == 'clockRising')) ? (invert ? d.value ^ 1 : d.value) : pState.value);
+				q.value = clr.value == 1 ? 0 : (ce.value == 0 ? q.value : (clk.State == 'clockRising' ? pState.value : q.value));
+				1;
+				/*
+				if (clr.value == 1) {
+					q.value = 0;
+					return;
+				}
+				if (ce.value == 0) {
+					return;
+				}
+				if (clk.state == 'clockHoldingLow' || clk.State == 'clockRising') {
+					pState.value = (invert ? d.value ^ 1 : d.value);
+				}
+				if (useState) {
+					q.value = clk.state == 'clockRising' ? pState.value : q.value;
+				} else {
+					q.value = clk.state == 'clockRising' ? (invert ? d.value ^ 1 : d.value) : q.value;
+				}
+				*/
+			}
+			setInterval(cycle, data.clock.componentInterval);
+		}
+
+		const FdpFlipFlop = (pre, clk, d, q, invert, useState) => {
+			const pState = Bit({ val: pre.value });
+			const cycle = () => {
+				pState.value = pre.value == 1 ? 1 : (clk.state == 'clockHoldingLow' || (useState && clk.State == 'clockRising') ? (invert ? d.value ^ 1 : d.value) : pState.value);
+				q.value = pre.value == 1 || clk.state == 'clockRising' ? pState.value : q.value;
+				1;
+				/*
+				if (pre.value == 1) {
+					q.value = 1;
+					return;
+				}
+				if (clk.state == 'clockHoldingLow' || clk.State == 'clockRising') {
+					pState.value = (invert ? d.value ^ 1 : d.value);
+				}
+				if (useState) {
+					q.value = clk.state == 'clockRising' ? pState.value : q.value;
+				} else {
+					q.value = clk.state == 'clockRising' ? (invert ? d.value ^ 1 : d.value) : q.value;
+				}
+				*/
+			}
+			setInterval(cycle, data.clock.componentInterval);
+		}
+
+		const FdcFlipFlop = (clr, clk, d, q, invert, useState) => {
+			const pState = Bit();
+			const cycle = () => {
+				pState.value = clr.value == 1 ? 0 : (clk.state == 'clockHoldingLow' || (useState && clk.State == 'clockRising') ? (invert ? d.value ^ 1 : d.value) : pState.value);
+				q.value = clr.value == 1 || clk.state == 'clockRising' ? pState.value : q.value;
+				1;
+				/*
+				if (clr.value == 1) {
+					q.value = 0;
+					return;
+				}
+				if (clk.state == 'clockHoldingLow' || clk.State == 'clockRising') {
+					pState.value = (invert ? d.value ^ 1 : d.value);
+				}
+				if (useState) {
+					q.value = clk.state == 'clockRising' ? pState.value : q.value;
+				} else {
+					q.value = clk.state == 'clockRising' ? (invert ? d.value ^ 1 : d.value) : q.value;
+				}
+				*/
+			}
+			setInterval(cycle, data.clock.componentInterval);
+		}
+
+		const Register = (num) => (dBus, clr, ce, clk, qBus, useState) => {
+			const flipFlops = Array.from(Array(num)).map((d, i) => FdceFlipFlop(clr, ce, clk, dBus.bits[i], qBus.bits[i],
+				false, useState ? useState : false));
+			return {
+				dBus,
+				qBus,
+				flipFlops,
+				ce
+			}
+		}
+		const Register2 = Register(2);
+		const Register4 = Register(4)
+		const Register8 = Register(8)
+		const Register16 = Register(16)
+
+		const RingCounter = (NumFlipFlops) => (clr, clk, bus) => {
+			const flipFlops = Array.from(Array(NumFlipFlops))
+				.map((d, i) => i == 0 ? FdpFlipFlop : FdcFlipFlop)
+				.map((d, i) => d(clr, clk, bus.bits[(i == 0 ? NumFlipFlops - 1 : i - 1)], bus.bits[i], null, true));
+		}
+		const RingCounter3 = RingCounter(3);
+		const RingCounter4 = RingCounter(4);
+
+		const Split8 = (data) => {
+			return {
+				bits: data,
+				get High() {
+					return BitBus({
+						width: 8,
+						bits: data.slice(0, 4).bits
+					})
+				},
+				get Low() {
+					return BitBus({
+						width: 8,
+						bits: data.slice(4, 8).bits
+					})
+				}
+			}
+		}
+
+		const Split16 = (data) => {
+			return {
+				bits: data,
+				get High() {
+					return BitBus({
+						width: 8,
+						bits: data.slice(0, 8).bits
+					})
+				},
+				get Low() {
+					return BitBus({
+						width: 8,
+						bits: data.slice(8, 16).bits
+					})
+				}
+			}
+		}
+
+		const Join8 = (High, Low) => {
+			const bits = BitBus({
+				width: 8,
+				bits: [].concat.apply(High.bits, Low.bits)
+			});
+			return {
+				High,
+				Low,
+				bits
+			}
+		}
+
+		const Join16 = (High, Low) => {
+			const bits = BitBus({
+				width: 16,
+				bits: [].concat.apply(High.bits, Low.bits)
+			});
+			return {
+				High,
+				Low,
+				bits
+			}
+		}
+
+		const Decoder = (clk, clr, irBus, aluZero, IR_EN, ROM_EN, RAM_EN, RAM_WR, ADDR_SEL, DATA_SEL, PC_EN, PC_LD, ACC_EN,
+			ACC_CTL0, ACC_CTL1, ACC_CTL2) => {
+			const SequenceGenerator = () => {
+				const sGenBus = BitBus({
+					width: 3
+				});
+				const ringCounter = RingCounter3(clr, clk, sGenBus);
+				return {
+					get fetch() {
+						return sGenBus.bits[0];
+					},
+					get decode() {
+						return sGenBus.bits[1];
+					},
+					get execute() {
+						return sGenBus.bits[2];
+					},
+					sGenBus
+				}
+			};
+			const OneHotDecoder = (iBus) => {
+				// iBus is 4-bits and oBus is 16-bits
+				const oBus = BitBus({
+					width: 16
+				});
+
+				tb1 = [iBus.bits[3], iBus.bits[2], iBus.bits[1], iBus.bits[0]];
+				tb2 = [Bit(), Bit(), Bit(), Bit()];
+				tb2.forEach((d, i) => INV(tb1[i], d));
+
+				And4(tb2[3], tb2[2], tb2[1], tb2[0], oBus.bits[0]); //Move
+				And4(tb2[3], tb2[2], tb2[1], tb1[0], oBus.bits[1]); //Add
+				And4(tb2[3], tb2[2], tb1[1], tb2[0], oBus.bits[2]); //Sub
+				And4(tb2[3], tb2[2], tb1[1], tb1[0], oBus.bits[3]); //Bitwise_And
+				And4(tb2[3], tb1[2], tb2[1], tb2[0], oBus.bits[4]); //Load
+				And4(tb2[3], tb1[2], tb2[1], tb1[0], oBus.bits[5]); //Store
+				And4(tb2[3], tb1[2], tb1[1], tb2[0], oBus.bits[6]); //AddM
+				And4(tb2[3], tb1[2], tb1[1], tb1[0], oBus.bits[7]);
+				And4(tb1[3], tb2[2], tb2[1], tb2[0], oBus.bits[8]); //JumpU
+				And4(tb1[3], tb2[2], tb2[1], tb1[0], oBus.bits[9]); //JumpZ
+				And4(tb1[3], tb2[2], tb1[1], tb2[0], oBus.bits[10]); //JumpNZ
+				And4(tb1[3], tb2[2], tb1[1], tb1[0], oBus.bits[11]);
+				And4(tb1[3], tb1[2], tb2[1], tb2[0], oBus.bits[12]);
+				And4(tb1[3], tb1[2], tb2[1], tb1[0], oBus.bits[13]);
+				And4(tb1[3], tb1[2], tb1[1], tb2[0], oBus.bits[14]);
+				And4(tb1[3], tb1[2], tb1[1], tb1[0], oBus.bits[15]);
+				return {
+					move: oBus.bits[0],
+					add: oBus.bits[1],
+					sub: oBus.bits[2],
+					bitwiseAnd: oBus.bits[3],
+					load: oBus.bits[4],
+					store: oBus.bits[5],
+					addm: oBus.bits[6],
+					jumpU: oBus.bits[8],
+					jumpZ: oBus.bits[9],
+					jumpNz: oBus.bits[10],
+					iBus
+				}
+			}
+
+			const sGen = SequenceGenerator();
+			const oneHot = OneHotDecoder(irBus.slice(0, 4));
+
+			// Do all the decoder magic here
+			(() => {
+				const [iZ, b1, b2, b4, b5, b6, b7, b8, b9, o6] = Array.from(Array(10)).map(d => Bit());
+				INV(aluZero, iZ);
+				REP(sGen.fetch, IR_EN);
+				REP(sGen.fetch, ROM_EN);
+
+				Or2(sGen.decode, sGen.execute, b1);
+				Or3(oneHot.load, oneHot.store, oneHot.addm, b2);
+
+				And2(b1, b2, RAM_EN);
+				And2(sGen.execute, oneHot.store, RAM_WR);
+				And2(b1, b2, ADDR_SEL);
+
+				Or2(oneHot.load, oneHot.addm, DATA_SEL);
+
+				And2(oneHot.jumpZ, aluZero, b4);
+				And2(oneHot.jumpNz, iZ, b5);
+
+				Or3(oneHot.jumpU, b4, b5, b6);
+				INV(b6, b7);
+				And2(b7, sGen.decode, b8);
+
+				And2(b6, sGen.execute, b9);
+				Or2(b8, b9, PC_EN);
+
+				REP(b6, PC_LD);
+
+				Or6(oneHot.move, oneHot.add, oneHot.sub, oneHot.bitwiseAnd, oneHot.load, oneHot.addm, o6);
+				And2(o6, sGen.execute, ACC_EN);
+
+				Or2(oneHot.move, oneHot.load, ACC_CTL2);
+				REP(oneHot.bitwiseAnd, ACC_CTL1);
+				REP(oneHot.sub, ACC_CTL0);
+			})();
+			return {
+				sGen,
+				oneHot,
+				irBus,
+				ramEN: RAM_EN,
+				ramRW: RAM_WR,
+				romEN: ROM_EN,
+				zIn: aluZero,
+				addrSel: ADDR_SEL,
+				dataSel: DATA_SEL
+			}
+		}
+
+		// TODO: Implement flipflops instead of all this jazz
+		const Ram = (dIn, dOut, addr, we, clk) => {
+			const ramClk = Bit();
+			INV(clk, ramClk);
+
+			const memory = Array.from(Array(256))
+				.map(d => BitBus({
+					width: 16
+				}));
+
+			const loadWord = (data, offset) => {
+				data.split('')
+					.map(d => parseInt(d, 2))
+					.forEach((d, i) => memory[offset].bits[i].value = d);
+			};
+			const loadData = (data, offset) => data.forEach((d, i) => loadWord(d, i));
+
+			const cycle = (e) => {
+				const address = parseInt(addr.raw.join(''), 2);
+				dOut.bits.forEach((d, i) => {
+					if (data.pins.clk.value == 0 && we.value == 1) {
+						memory[address].bits[i].value = dIn.bits[i].value;
+					}
+					d.value = memory[address].bits[i].value
+				});
+			}
+			setInterval(cycle, data.clock.componentInterval);
+
+			return {
+				loadWord,
+				loadData,
+				memory,
+				dIn,
+				dOut
+			}
+		}
+
+		const data = {
+			busses: {
+				muxIZBus: BitBus(), muxDZBus: BitBus(),
+				irQBus: BitBus({ width: 16 }),
+				pcQBus: BitBus(), aluZBus: BitBus(),
+				acQBus: BitBus(), ramAddrBus: BitBus(),
+				ramOutBus: BitBus({ width: 16 })
+			},
+			pins: {
+				ce: Bit(), clr: Bit(),
+				clk: { state: '', value: 0 },
+				enIR: Bit(), enPC: Bit(), enDA: Bit(),
+				enLD: Bit(), enRom: Bit(), enRam: Bit(),
+				addrSel: Bit(), dataSel: Bit(),
+				accCtl0: Bit(), accCtl1: Bit(), accCtl2: Bit(),
+				aluCOut: Bit(), aluZero: Bit(),
+				s0: Bit(), s1: Bit(), s2: Bit(), s3: Bit(), s4: Bit(),
+				ramRW: Bit(),
+			},
+			clock: {
+				componentInterval: 30,
+				appInterval: 150,
+				uiInterval: 10
+			}
+		}
+
+		// Splitters & joiners
+		const s16_1 = Split16(data.busses.irQBus);
+		const s16_2 = Split16(data.busses.ramOutBus);
+
+		const fillBus = BitBus({
+			width: 4
+		});
+		const addrBus = Split8(data.busses.irQBus);
+		const j8_1 = Join8(addrBus.High, fillBus);
+		const j16_1 = Join16(j8_1.bits, data.busses.acQBus);
+
+		// Build RAM
+		const ram = Ram(
+			j16_1.bits, data.busses.ramOutBus, data.busses.ramAddrBus,
+			data.pins.ramRW, data.pins.clk
+		);
+
+		// Instruction Register
+		const irReg = Register16(
+			data.busses.ramOutBus, data.pins.clr, data.pins.enIR,
+			data.pins.clk, data.busses.irQBus
+		);
+
+		// Program Control Register
+		const pcReg = ProgramCounter(
+			s16_1.Low, data.pins.enLD, data.pins.clk,
+			data.pins.enPC, data.pins.clr, data.busses.pcQBus
+		);
+
+		// Accumulator Register
+		const acReg = Register8(
+			data.busses.aluZBus, data.pins.clr,
+			data.pins.enDA, data.pins.clk, data.busses.acQBus,
+			true
+		);
+
+		// MultiplexorA - Memory Addressing
+		const muxA = Mux21(
+			data.busses.pcQBus, s16_1.Low, data.pins.addrSel,
+			data.busses.ramAddrBus
+		);
+
+		// MultiplexorD - Data Mux
+		const muxD = Mux21(
+			s16_1.Low, s16_2.Low, data.pins.dataSel,
+			data.busses.muxDZBus
+		);
+
+		// Build the ALU
+		const alu = ArithmeticLogicUnit(
+			data.busses.acQBus, data.busses.muxDZBus,
+			data.pins.accCtl0, data.pins.accCtl1, data.pins.accCtl2,
+			data.busses.aluZBus, data.pins.aluCOut
+		);
+
+		// Build the ZERO flag from the ALU's output
+		const n8_1 = NOR8(data.busses.acQBus, data.pins.aluZero);
+
+		// Build the Decoder
+		const decoder = Decoder(data.pins.clk, data.pins.clr, data.busses.irQBus,
+			data.pins.aluZero, data.pins.enIR, data.pins.enRom, data.pins.enRam,
+			data.pins.ramRW, data.pins.addrSel, data.pins.dataSel,
+			data.pins.enPC, data.pins.enLD, data.pins.enDA,
+			data.pins.accCtl0, data.pins.accCtl1, data.pins.accCtl2);
+
+
+
+		ram.loadData([
+			'0000000000000001', // 0000 - Move
+			'0101000011110000', // 0001 - Store
+			'0101000011111111', // 0002 - Store
+			'0100000011111111', // 0003 - Load
+			'0011000001000000', // 0004 - And
+			'1001000000000011', // 0005 - JumpZ
+			'0000000000000110', // 0006 - Move
+			'1000000000001111', // 0007 - JumpU
+			'0100000011111111', // 0008 - Load
+			'0011000001000000', // 0009 - And
+			'1010000000001000', // 0010 - JumpNz
+			'0000000000001011', // 0011 - Move
+			'1000000000001111', // 0012 - JumpU
+			'1010000000000011', // 0013 - JumpNz
+			'1000000000000000', // 0014 - JumpU
+			'0001000000000010', // 0015 - Add
+			'0101100000010101', // 0016 - Store
+			'0100000011110000', // 0017 - Load
+			'0110000011110000', // 0018 - AddM
+			'0101000011110000', // 0019 - Store
+			'1000000000000000', // 0020 - JumpU
+			'0101000011111111'	// 0021 - Store
+		], 0);		
+		const appClock = Clock(data.pins.clk, data.pins.ce, data.pins.clr);
+		appClock.powerOn();
+
+
+
+		const buildIt = () => {
+			const buildLed = (classNames, parentElem) => {
+				newElem = document.createElement('div');
+				classNames.forEach(d => newElem.classList.add(d))
+				newElem.classList.add('led');
+				document.querySelector(parentElem).append(newElem);
+			}
+			const buildMultiLed = (className, parentElem, srcArray) => {
+				// srcArray.forEach((d, i, e) => buildLed([className, `item${e.length - 1 - (i % e.length)}`], parentElem));
+				srcArray.forEach((d, i, e) => buildLed([className, `item${i}`], parentElem));
+			}
+			buildLed(['led', 'wide'], '.misc .clk');
+			buildLed(['led'], '.misc .clr');
+			buildLed(['led'], '.misc .ce');
+
+			buildLed(['led'], '.decoder .sf');
+			buildLed(['led'], '.decoder .sd');
+			buildLed(['led'], '.decoder .se');
+			buildLed(['led'], '.decoder .ramEn');
+			buildLed(['led'], '.decoder .ramWr');
+			buildLed(['led'], '.decoder .romEn');
+			const iClasses = ['.M', '.A', '.S', '.Ba', '.L', '.St', '.Am', '.Ju', '.Jz', '.Jnz'];
+			iClasses.forEach(d => buildLed(['led'], `.decoder .idBus ${d}`));
+			buildLed(['led'], '.decoder .addrSel');
+			buildLed(['led'], '.decoder .dataSel');
+			buildMultiLed('busLed', '.decoder .irBus', decoder.oneHot.iBus.raw);
+			buildLed(['led'], '.decoder .srZIn');
+
+			buildLed(['led'], '.irReg .enable');
+			buildMultiLed('irRegD', '.irReg .dBus', irReg.dBus.raw);
+			buildMultiLed('irRegQ', '.irReg .qBus', irReg.qBus.raw);
+
+			buildLed(['led'], '.pcReg .ceenable');
+			buildLed(['led'], '.pcReg .ldenable');
+			buildMultiLed('pcRegD', '.pcReg .dBus', pcReg.dBus.raw);
+			buildMultiLed('pcRegQ', '.pcReg .qBus', pcReg.qBus.raw);
+
+			buildLed(['led'], '.acReg .enable');
+			buildMultiLed('acRegD', '.acReg .dBus', acReg.dBus.raw);
+			buildMultiLed('acRegQ', '.acReg .qBus', acReg.qBus.raw);
+
+			buildMultiLed('aluA', '.alu .aBus', data.busses.muxIZBus.raw);
+			buildMultiLed('aluB', '.alu .bBus', data.busses.muxDZBus.raw);
+			buildMultiLed('aluZ', '.alu .zBus', data.busses.aluZBus.raw);
+			buildLed(['led'], '.alu .s0');
+			buildLed(['led'], '.alu .s1');
+			buildLed(['led'], '.alu .s2');
+			buildLed(['led'], '.alu .s3');
+			buildLed(['led'], '.alu .s4');
+			buildLed(['led'], '.alu .zbit');
+			buildLed(['led'], '.alu .carry');
+
+			buildMultiLed('dIn', '.ram .dIn', j16_1.bits.raw);
+			buildMultiLed('addr', '.ram .addr', data.busses.ramAddrBus.raw);
+			buildMultiLed('dOut', '.ram .dOut', data.busses.ramOutBus.raw);
+			buildLed(['ramRW'], '.ram .rw');
+
+			buildLed(['led'], '.muxA .sel');
+			buildMultiLed('muxA', '.muxA .aBus', muxA.aBus.raw);
+			buildMultiLed('muxA', '.muxA .bBus', muxA.bBus.raw);
+			buildMultiLed('muxA', '.muxA .zBus', muxA.zBus.raw);
+
+			buildLed(['led'], '.muxD .sel');
+			buildMultiLed('muxD', '.muxD .aBus', muxD.aBus.raw);
+			buildMultiLed('muxD', '.muxD .bBus', muxD.bBus.raw);
+			buildMultiLed('muxD', '.muxD .zBus', muxD.zBus.raw);
+
+			buildMultiLed('led', '.s16_1 .all', s16_1.bits.raw);
+			buildMultiLed('led', '.s16_1 .high', s16_1.High.raw);
+			buildMultiLed('led', '.s16_1 .low', s16_1.Low.raw);
+
+			buildMultiLed('led', '.s16_2 .all', s16_2.bits.raw);
+			buildMultiLed('led', '.s16_2 .high', s16_2.High.raw);
+			buildMultiLed('led', '.s16_2 .low', s16_2.Low.raw);
+
+			buildMultiLed('led', '.j16_1 .high', j16_1.High.raw);
+			buildMultiLed('led', '.j16_1 .low', j16_1.Low.raw);
+			buildMultiLed('led', '.j16_1 .all', j16_1.bits.raw);
+		}
+
+		const report = () => {
+			const setOn = (elem) => {
+				elem.classList.add('on');
+			}
+			const setOff = (elem) => {
+				elem.classList.remove('on');
+			}
+			const update = () => {
+				(data.pins.clk.value == 0 ? setOff : setOn)(document.querySelector('.misc .clk .led'));
+				data.pins.clk.state == 'clockRising' ? document.querySelector('.misc .clk .led').innerHTML = 'R' :
+					undefined;
+				data.pins.clk.state == 'clockHoldingHigh' ? document.querySelector('.misc .clk .led').innerHTML =
+					'HH' : undefined;
+				data.pins.clk.state == 'clockFalling' ? document.querySelector('.misc .clk .led').innerHTML = 'F' :
+					undefined;
+				data.pins.clk.state == 'clockHoldingLow' ? document.querySelector('.misc .clk .led').innerHTML =
+					'HL' : undefined;
+				(data.pins.clr.value == 0 ? setOff : setOn)(document.querySelector('.misc .clr .led'));
+				(data.pins.ce.value == 0 ? setOff : setOn)(document.querySelector('.misc .ce .led'));
+
+				//Mux A
+				(data.pins.addrSel.value == 0 ? setOff : setOn)(document.querySelector('.muxA .sel .led'));
+				muxA.aBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.muxA .aBus .item${i}`)));
+				document.querySelector('.muxA .aVal').innerHTML = parseInt(muxA.aBus.raw.join(''), 2);
+				muxA.bBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.muxA .bBus .item${i}`)));
+				document.querySelector('.muxA .bVal').innerHTML = parseInt(muxA.bBus.raw.join(''), 2);
+				muxA.zBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.muxA .zBus .item${i}`)));
+				document.querySelector('.muxA .zVal').innerHTML = parseInt(muxA.zBus.raw.join(''), 2);
+
+				// Mux D
+				(data.pins.dataSel.value == 0 ? setOff : setOn)(document.querySelector('.muxD .sel .led'));
+				muxD.aBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.muxD .aBus .item${i}`)));
+				document.querySelector('.muxD .aVal').innerHTML = parseInt(muxD.aBus.raw.join(''), 2);
+				muxD.bBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.muxD .bBus .item${i}`)));
+				document.querySelector('.muxD .bVal').innerHTML = parseInt(muxD.bBus.raw.join(''), 2);
+				muxD.zBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.muxD .zBus .item${i}`)));
+				document.querySelector('.muxD .zVal').innerHTML = parseInt(muxD.zBus.raw.join(''), 2);
+
+				//Instruction Register
+				(data.pins.enIR.value == 0 ? setOff : setOn)(document.querySelector('.irReg .enable .led'));
+				irReg.dBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.irReg .dBus .item${i}`)));
+				irReg.qBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.irReg .qBus .item${i}`)));
+				document.querySelector('.irReg .dIn1').innerHTML = parseInt(s16_2.High.raw.join(''), 2);
+				document.querySelector('.irReg .dIn2').innerHTML = parseInt(s16_2.Low.raw.join(''), 2);
+				document.querySelector('.irReg .dOut1').innerHTML = parseInt(s16_1.High.raw.join(''), 2);
+				document.querySelector('.irReg .dOut2').innerHTML = parseInt(s16_1.Low.raw.join(''), 2);
+
+				//PC Register
+				(data.pins.enPC.value == 0 ? setOff : setOn)(document.querySelector('.pcReg .ceenable .led'));
+				(data.pins.enLD.value == 0 ? setOff : setOn)(document.querySelector('.pcReg .ldenable .led'));
+				pcReg.dBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.pcReg .dBus .item${i}`)));
+				document.querySelector('.pcReg .dVal').innerHTML = parseInt(pcReg.dBus.raw.join(''), 2);
+				pcReg.qBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.pcReg .qBus .item${i}`)));
+				document.querySelector('.pcReg .qVal').innerHTML = parseInt(pcReg.qBus.raw.join(''), 2);
+
+				// Accumulator Register
+				(data.pins.enDA.value == 0 ? setOff : setOn)(document.querySelector('.acReg .enable .led'));
+				acReg.dBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.acReg .dBus .item${i}`)));
+				document.querySelector('.acReg .dVal').innerHTML = parseInt(acReg.dBus.raw.join(''), 2);
+				acReg.qBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.acReg .qBus .item${i}`)));
+				document.querySelector('.acReg .qVal').innerHTML = parseInt(acReg.qBus.raw.join(''), 2);
+
+				//Decoder
+				(decoder.sGen.fetch.value == 0 ? setOff : setOn)(document.querySelector('.decoder .sF .led'));
+				(decoder.sGen.decode.value == 0 ? setOff : setOn)(document.querySelector('.decoder .sD .led'));
+				(decoder.sGen.execute.value == 0 ? setOff : setOn)(document.querySelector('.decoder .sE .led'));
+				(decoder.ramEN.value == 0 ? setOff : setOn)(document.querySelector('.decoder .ramEn .led'));
+				(decoder.romEN.value == 0 ? setOff : setOn)(document.querySelector('.decoder .romEn .led'));
+				(decoder.ramRW.value == 0 ? setOff : setOn)(document.querySelector('.decoder .ramWr .led'));
+				(decoder.oneHot.move.value == 0 ? setOff : setOn)(document.querySelector('.decoder .idBus .M .led'));
+				(decoder.oneHot.add.value == 0 ? setOff : setOn)(document.querySelector('.decoder .idBus .A .led'));
+				(decoder.oneHot.sub.value == 0 ? setOff : setOn)(document.querySelector('.decoder .idBus .S .led'));
+				(decoder.oneHot.bitwiseAnd.value == 0 ? setOff : setOn)(document.querySelector(
+					'.decoder .idBus .Ba .led'));
+				(decoder.oneHot.load.value == 0 ? setOff : setOn)(document.querySelector('.decoder .idBus .L .led'));
+				(decoder.oneHot.store.value == 0 ? setOff : setOn)(document.querySelector(
+				'.decoder .idBus .St .led'));
+				(decoder.oneHot.addm.value == 0 ? setOff : setOn)(document.querySelector('.decoder .idBus .Am .led'));
+				(decoder.oneHot.jumpU.value == 0 ? setOff : setOn)(document.querySelector(
+				'.decoder .idBus .Ju .led'));
+				(decoder.oneHot.jumpZ.value == 0 ? setOff : setOn)(document.querySelector(
+				'.decoder .idBus .Jz .led'));
+				(decoder.oneHot.jumpNz.value == 0 ? setOff : setOn)(document.querySelector(
+					'.decoder .idBus .Jnz .led'));
+				(decoder.addrSel.value == 0 ? setOff : setOn)(document.querySelector('.decoder .addrSel .led'));
+				(decoder.dataSel.value == 0 ? setOff : setOn)(document.querySelector('.decoder .dataSel .led'));
+				decoder.oneHot.iBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.decoder .irBus .item${i}`)));
+				(decoder.zIn.value == 0 ? setOff : setOn)(document.querySelector('.decoder .srZIn .led'));
+
+				//Alu
+				alu.aBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.aluA.item${i}`)));
+				document.querySelector('.alu .aVal').innerHTML = parseInt(alu.aBus.raw.join(''), 2);
+				alu.bBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.aluB.item${i}`)));
+				document.querySelector('.alu .bVal').innerHTML = parseInt(alu.bBus.raw.join(''), 2);
+				alu.zBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(`.aluZ.item${i}`)));
+				document.querySelector('.alu .zVal').innerHTML = parseInt(alu.zBus.raw.join(''), 2);
+				(data.pins.s0.value == 0 ? setOff : setOn)(document.querySelector('.alu .s0 .led'));
+				(data.pins.s1.value == 0 ? setOff : setOn)(document.querySelector('.alu .s1 .led'));
+				(data.pins.s2.value == 0 ? setOff : setOn)(document.querySelector('.alu .s2 .led'));
+				(data.pins.s3.value == 0 ? setOff : setOn)(document.querySelector('.alu .s3 .led'));
+				(data.pins.s4.value == 0 ? setOff : setOn)(document.querySelector('.alu .s4 .led'));
+				(data.pins.aluZero.value == 0 ? setOff : setOn)(document.querySelector('.alu .zbit .led'));
+				(data.pins.aluCOut.value == 0 ? setOff : setOn)(document.querySelector('.alu .carry .led'));
+
+				//Ram
+				j16_1.bits.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.ram .dIn .item${i}`)));
+				data.busses.ramAddrBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.ram .addr .item${i}`)));
+				data.busses.ramOutBus.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.ram .dOut .item${i}`)));
+				(data.pins.ramRW.value == 0 ? setOff : setOn)(document.querySelector('.ram .rw .ramRW'));
+				document.querySelector('.ram .rawVal').innerHTML = parseInt(data.busses.ramAddrBus.raw.join(''), 2);
+				document.querySelector('.ram .dIn1').innerHTML = parseInt(fillBus.raw.join(''), 2);
+				document.querySelector('.ram .dIn2').innerHTML = parseInt(data.busses.acQBus.raw.join(''), 2);
+				document.querySelector('.ram .dOut1').innerHTML = parseInt(s16_2.High.raw.join(''), 2);
+				document.querySelector('.ram .dOut2').innerHTML = parseInt(s16_2.Low.raw.join(''), 2);
+
+				s16_1.bits.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.s16_1 .all .item${i}`)));
+				s16_1.High.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.s16_1 .high .item${i}`)));
+				s16_1.Low.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.s16_1 .low .item${i}`)));
+
+				s16_2.bits.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.s16_2 .all .item${i}`)));
+				s16_2.High.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.s16_2 .high .item${i}`)));
+				s16_2.Low.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.s16_2 .low .item${i}`)));
+
+				j16_1.bits.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.j16_1 .all .item${i}`)));
+				j16_1.High.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.j16_1 .high .item${i}`)));
+				j16_1.Low.raw.forEach((d, i) => (d == 0 ? setOff : setOn)(document.querySelector(
+					`.j16_1 .low .item${i}`)));
+			}
+			setInterval(update, data.clock.uiInterval);
+			return {
+				update
+			}
+		}
+
+		const stepClock = () => appClock.stepClock();
+		const stepCycle = () => appClock.stepCycle();
+		const fullCycle = () => appClock.fullCycle();
+		const cycleContinuous = () => appClock.cycleContinuously();
+		buildIt();
+		report();
+	</script>
+</body>
+
+</html>

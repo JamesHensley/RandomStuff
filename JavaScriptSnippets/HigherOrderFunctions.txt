@@ -1,0 +1,43 @@
+/* Higher Order functions */
+
+function greaterThan(n) {
+	return function(x) {
+		return x > n;
+	}
+};
+let greaterThanTwo = greaterThan(2)
+console.log(greaterThanTwo(3))	// True
+console.log(greaterThanTwo(1))	// False
+
+
+
+
+let greaterThan = (n) => (x) => x > n;
+let greaterThanTwo = greaterThan(2)
+console.log(greaterThanTwo(3))	// True
+console.log(greaterThanTwo(1))	// False
+
+
+
+
+const employees = [["Megan", 12000], ["John", 12500]];
+// Lambda expression
+// curried function
+const increaseSalary = increment => salary => salary + increment;
+// partial application
+const increment = increaseSalary(1000);
+const handleIncrementForEmployees = (employees, increment) => employees
+	.map(([name, salary], i) => [name, increment(salary), `Employee_${i}`]);
+const happyEmployees = handleIncrementForEmployees(employees, increment);
+
+
+
+
+// higher order function - howToGreetFn is a function which is taken as an input
+const greet = howToGreetFn => data => howToGreetFn(data);
+
+const greetFriend = greet(name => `How are you ${name}`);
+console.log(greetFriend("John"));
+
+const greetAnonymous = greet(name => `Hello ${name}`);
+console.log(greetAnonymous("Sam"));

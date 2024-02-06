@@ -1,0 +1,38 @@
+/* Factory Method */
+const createUser = ({ userName, avatar }) => ({
+  userName,
+  avatar,
+  setUserName(userName) {
+    this.userName = userName;
+    return this;
+  }
+});
+console.log(createUser({ userName: 'Jimmy', avatar: 'echo.png' }));
+
+
+// Using default properties
+const createUser = ({
+	userName = 'Anonymous',
+	avatar = 'ZombieSpider.png',
+	age = Math.floor((Math.random() * 30) + 2)
+} = {}) => ({
+  userName,
+  avatar,
+  age,
+  setUserName(userName) {
+    this.userName = userName;
+    return this;
+  },
+  get isChild() { return this.age < 18; }
+});
+var xx = Array.from(Array(10).keys()).map(d => createUser({ userName: `User${d}` }))
+
+
+// With private members
+const facFunction = str => {
+  const capitalizeString = () => str.toUpperCase();
+  const getStringUpper = () => { return `${capitalizeString()}` };
+  const getStringLower = () => str.toLowerCase();
+  return { getStringUpper, getStringLower };
+};
+var xx = Array.from(Array(10).keys()).map(d => facFunction(`User${d}`))

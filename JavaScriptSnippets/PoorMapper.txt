@@ -1,0 +1,54 @@
+class A {
+	name;
+	timestamp;
+	commonField;
+
+	constructor(itemName) {
+		this.name = itemName;
+		this.timestamp = new Date().getTime();
+		this.commonField = "Class A commonField value";
+	}
+}
+
+class B {
+	FormalName;
+	creationTimestamp;
+	commonField;
+}
+
+
+
+
+const mapIt = (m, destType) => (src) => {
+	// Creates an array of common field names and an object of fieldnames & values from the src, then
+	//   assigns that object to our original source.  Allows us to only have to define fieldname mappings
+	//   from source->dest that are different
+	const mapSimilar = (d) => Object.assign(d, 
+		Object.keys(src)
+			.filter(f => Object.keys(d).indexOf(f) >= 0)
+			.reduce((t, n) => Object.assign(t, { [n]: src[n] }), {})
+	);
+
+	// Runs through the provided mapped field names(m) and sets values from src to dest
+	const map = (d) => Object.keys(m)
+		.reduce((t, n) => Object.assign(t, { [m[n]]: src[n] }), d);
+
+	return mapSimilar(map(new destType()));
+}
+
+const mapA2B = mapIt({
+	'name': 'FormalName',
+	'timestamp': 'creationTimestamp',
+}, B);
+
+const mapB2A = mapIt({
+	'FormalName': 'name',
+	'creationTimestamp': 'timestamp',
+}, A);
+
+
+
+
+let aClass = new A('Jimmy');
+let bClass = mapA2B(aClass);
+let cClass = mapB2A(bClass);

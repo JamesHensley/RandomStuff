@@ -1,0 +1,14 @@
+ab = BitBus();
+bb = BitBus();
+zb = BitBus();
+s = BitBus({ width: 5 });
+[c, c1, c2] = [Bit(), Bit(), Bit()];
+
+ab.setBits('11111010');
+bb.setBits('00000101');
+a = ArithmeticLogicUnit(ab, bb, s.bits[0], s.bits[1], s.bits[2], s.bits[3], s.bits[4], zb, c)
+
+zb.raw
+
+z = BitBus();
+a.RippleAdder(ab, bb, c1, c2, z)

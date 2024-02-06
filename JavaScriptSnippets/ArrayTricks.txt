@@ -1,0 +1,5 @@
+/* Generators */
+Array.from(Array(10))	// Creates an array with 10-undefined elements...could be used in place of a gross loop
+Array.from(Array(10).keys())	// Creates an array of numbers 0-9
+Array.from(Array(10).keys()).map(d => d + 1)	// // Creates an array of numbers 1-10
+
